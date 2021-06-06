@@ -49,7 +49,7 @@ def callAPI(request: Request):
     elif curr_date.weekday()==6:
         curr_date = curr_date - timedelta(days=2)
 
-    time_dict = {dt.time(14, 13): dt.time(14, 10), dt.time(14, 43): dt.time(14, 40), dt.time(15, 18): dt.time(15, 15), dt.time(12, 25): dt.time(12, 10)}
+    time_dict = {dt.time(14, 13): dt.time(14, 10), dt.time(14, 43): dt.time(14, 40), dt.time(15, 18): dt.time(15, 15), dt.time(12, 40): dt.time(12, 30)}
 
     try:
         cutoff_time = time_dict[curr_time]
