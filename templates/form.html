@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTST-STBT Scanner</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active" id="full_list-tab" data-bs-toggle="tab" data-bs-target="#full_list" type="button" role="tab" aria-controls="full_list" aria-selected="true">Full List</button>
+          <button class="nav-link" id="btst_list-tab" data-bs-toggle="tab" data-bs-target="#btst_list" type="button" role="tab" aria-controls="btst_list" aria-selected="false">BTST</button>
+          <button class="nav-link" id="stbt_list-tab" data-bs-toggle="tab" data-bs-target="#stbt_list" type="button" role="tab" aria-controls="stbt_list" aria-selected="false">STBT</button>
+          <button class="nav-link" id="manual_btst-tab" data-bs-toggle="tab" data-bs-target="#manual_btst_list" type="button" role="tab" aria-controls="manual_btst_list" aria-selected="false">Manual BTST</button>
+          <button class="nav-link" id="manual_stbt-tab" data-bs-toggle="tab" data-bs-target="#manual_stbt_list" type="button" role="tab" aria-controls="manual_stbt_list" aria-selected="false">Manual STBT</button>
+        </div>
+        <p id="time"></p> 
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="full_list" role="tabpanel" aria-labelledby="full_list-tab">
+            <table id="fullList"></table>
+        </div>
+        <div class="tab-pane fade" id="btst_list" role="tabpanel" aria-labelledby="btst_list-tab">
+            <table id="btst"></table>
+        </div>
+        <div class="tab-pane fade" id="stbt_list" role="tabpanel" aria-labelledby="stbt_list-tab">
+            <table id="stbt"></table>
+        </div>
+        <div class="tab-pane fade" id="manual_btst_list" role="tabpanel" aria-labelledby="manual_btst-tab">
+            <table id="manual_btst"></table>
+        </div>
+        <div class="tab-pane fade" id="manual_stbt_list" role="tabpanel" aria-labelledby="manual_stbt-tab">
+            <table id="manual_stbt"></table>
+        </div>
+      </div>
+
+      <script>
+          const callAPI = ()=>{
+            fetch("/api",{
+                method: 'GET',
+                headers: {
+                      'Content-Type': 'application/json'
+                },
+            }).then(response => response.json())
+              .then(data => {
+                  let x = JSON.parse(data)
+                  console.log(x)
+                //   const timeStr = document.getElementById('time');
+                //   timeStr.innerHTML = "Time: " + x.time;
+                  
+                const fullList = document.getElementById('fullList');
+                const btst = document.getElementById('btst');
+                const stbt = document.getElementById('stbt');
+                const manual_btst = document.getElementById('manual_btst');
+                const manual_stbt = document.getElementById('manual_stbt');
+
+                const colHeaders = "<tr><th>id</th><th>name</th><th>cutoff_close</th><th>atr_val</th><th>atr_flag_btst</th><th>atr_flag_stbt</th><th>pc_100_coff</th><th>oic_yest_coff</th><th>vc_tdy_10day</th><th>candle_80_type</th><th>candle_80_val</th></tr>"
+
+                fullList.innerHTML = colHeaders;
+                btst.innerHTML = colHeaders;
+                stbt.innerHTML = colHeaders;
+                manual_btst.innerHTML = colHeaders;
+                manual_stbt.innerHTML = colHeaders;
+                
+                for (row of x.full_list){
+                	fullList.innerHTML += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.cutoff_close}</td><td>${row.atr_val}</td><td>${row.atr_flag_btst}</td><td>${row.atr_flag_stbt}</td><td>${row.pc_100_coff}</td><td>${row.oic_yest_coff}</td><td>${row.vc_tdy_10day}</td><td>${row.candle_80_type}</td><td>${row.candle_80_val}</td></tr>`
+                }
+                
+                for (row of x.btst){
+                    btst.innerHTML += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.cutoff_close}</td><td>${row.atr_val}</td><td>${row.atr_flag_btst}</td><td>${row.atr_flag_stbt}</td><td>${row.pc_100_coff}</td><td>${row.oic_yest_coff}</td><td>${row.vc_tdy_10day}</td><td>${row.candle_80_type}</td><td>${row.candle_80_val}</td></tr>`
+                }
+
+                for (row of x.stbt){
+                    stbt.innerHTML += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.cutoff_close}</td><td>${row.atr_val}</td><td>${row.atr_flag_btst}</td><td>${row.atr_flag_stbt}</td><td>${row.pc_100_coff}</td><td>${row.oic_yest_coff}</td><td>${row.vc_tdy_10day}</td><td>${row.candle_80_type}</td><td>${row.candle_80_val}</td></tr>`
+                }
+            
+                for (row of x.manual_btst){
+                    manual_btst.innerHTML += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.cutoff_close}</td><td>${row.atr_val}</td><td>${row.atr_flag_btst}</td><td>${row.atr_flag_stbt}</td><td>${row.pc_100_coff}</td><td>${row.oic_yest_coff}</td><td>${row.vc_tdy_10day}</td><td>${row.candle_80_type}</td><td>${row.candle_80_val}</td></tr>`
+                }
+            
+                for (row of x.manual_stbt){
+                    manual_stbt.innerHTML += `<tr><td>${row.id}</td><td>${row.name}</td><td>${row.cutoff_close}</td><td>${row.atr_val}</td><td>${row.atr_flag_btst}</td><td>${row.atr_flag_stbt}</td><td>${row.pc_100_coff}</td><td>${row.oic_yest_coff}</td><td>${row.vc_tdy_10day}</td><td>${row.candle_80_type}</td><td>${row.candle_80_val}</td></tr>`
+                }
+                
+                }
+                );
+          }
+
+        window.addEventListener('load', (event)=>{
+            event.preventDefault();
+            console.log('HELLO')
+            callAPI();
+            
+            const currentTime = new Date();
+            const currentOffset = currentTime.getTimezoneOffset();
+            const ISTOffset = 330;   // IST offset UTC +5:30 
+            const ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
+
+            
+            const callTime_213 = new Date(ISTTime.getTime()).setHours(14, 13, 0);
+            const callTime_243 = new Date(ISTTime.getTime()).setHours(14, 43, 0);
+            const callTime_318 = new Date(ISTTime.getTime()).setHours(15, 18, 0);
+            
+            const diff1 = callTime_213-ISTTime
+            const diff2 = callTime_243-ISTTime
+            const diff3 = callTime_318-ISTTime
+
+            console.log(diff1, diff2, diff3)
+
+            if (diff1>=0){
+                setTimeout(callAPI, diff1)
+            }
+
+            if (diff2>=0){
+                setTimeout(callAPI, diff2)
+            }
+
+            if (diff3>=0){
+                setTimeout(callAPI, diff3)
+            }
+
+        })
+
+    </script>
+    <style>
+        .tab-content{
+            display: flex;
+            justify-content: center;
+        }
+        table, td, th{
+            text-align: center;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        td,th{
+            padding: 10px;
+        }
+
+        nav{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        p{
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 30px;
+        }
+    </style>
+</body>
+</html>
+
+
